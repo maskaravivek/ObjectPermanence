@@ -67,17 +67,20 @@ def preprocess_video(process_args: List):
     #     print(f"Finished writing object detection outputs for video {video_name}")
 
     video_path, od_weights, results_dir = process_args
-    print(video_path)
+
+    # print(video_path)
     # assign an available gpu for this process
     # num_possible_gpu_devices = torch.cuda.device_count()
     # assigned_gpu = multiprocessing.current_process().ident % num_possible_gpu_devices
     # assigned_gpu = multiprocessing.current_process().ident % 2 + 2
     # device = torch.device(f'cuda:{assigned_gpu}')
-    device = torch.device(f'cuda:2')
+    device = torch.device(
+    'cuda') if torch.cuda.is_available() else torch.device('cpu')
 
     # load object detector
     factory = ModelsFactory()
-    detector: CaterObjectDetector = factory.get_detector_model("object_detector", od_weights)
+    detector = factory.get_detector_model("object_detector", od_weights)
+
     detector.load_model(device)
 
     # preform predictions for on the entire video and retrieve the results
@@ -88,6 +91,7 @@ def preprocess_video(process_args: List):
     results_dir = Path(results_dir)
     video_name = video_path.stem
     output_path = results_dir / (video_name + ".pkl")
+    print('output path', output_path)
     output_data = {"bb": bb_predictions, "labels": labels}
     if (len(output_data["bb"]) == 300) and (len(output_data["labels"]) == 300):
         with open(output_path, "wb") as f:

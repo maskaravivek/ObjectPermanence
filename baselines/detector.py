@@ -58,7 +58,7 @@ class CaterObjectDetector(object):
         detector: nn.Module = get_fast_rcnn_for_fine_tune(self.num_classes)
 
         # load saved parameters
-        saved_parameters = torch.load(self.saved_detector_path)
+        saved_parameters = torch.load(self.saved_detector_path, map_location=compute_device)
         saved_weights = saved_parameters["model_state_dict"]
         detector.load_state_dict(saved_weights)
 

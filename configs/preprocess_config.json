@@ -1,4 +1,4 @@
 {
-  "videos_dir": "data/train_data/videos",
-  "od_model_weights": "detection_model.pth"
+  "videos_dir": "/home/vmaskara/thesis/cater/videos",
+  "od_model_weights": "/home/vmaskara/thesis/ObjectPermanence/trained_models/detection_model.pth"
 }
